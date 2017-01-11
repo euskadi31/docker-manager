@@ -1,0 +1,18 @@
+hash: 0033dd1768970a91586d4f625e70ded6a36e52286763c343198891e061a3e318
+updated: 2017-01-11T14:05:45.547409762+01:00
+imports:
+- name: github.com/caarlos0/env
+  version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
+- name: github.com/rs/xhandler
+  version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
+- name: github.com/rs/xid
+  version: 057f3c928c207d1e7e318929eeac93bb46e319e3
+- name: github.com/rs/xlog
+  version: ee33a676e5f4bbda5b80dace72043f7e3b61ebda
+  subpackages:
+  - internal/term
+- name: golang.org/x/net
+  version: 905989bd20b7c354fd28a61074eed1c8f49ebc89
+  subpackages:
+  - context
+testImports: []

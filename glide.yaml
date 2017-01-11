@@ -1,0 +1,5 @@
+package: github.com/euskadi31/docker-manager
+import:
+- package: github.com/rs/xlog
+- package: github.com/caarlos0/env
+  version: ^2.1.0
