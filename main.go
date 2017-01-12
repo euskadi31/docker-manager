@@ -4,7 +4,15 @@
 
 package main
 
+import (
+	"log"
+)
+
 func main() {
-	server := NewServer()
+	server, err := NewServer()
+	if err != nil {
+		log.Panic(err)
+	}
+
 	server.Listen()
 }

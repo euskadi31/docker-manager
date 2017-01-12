@@ -6,13 +6,15 @@ package main
 
 import (
 	"github.com/caarlos0/env"
+	"github.com/rs/xlog"
 	"log"
 )
 
 // Configuration struct
 type Configuration struct {
-	Debug bool `env:"DEBUG" envDefault:"false"`
-	Port  int  `env:"PORT" envDefault:"8080"`
+	Debug  bool   `env:"DEBUG" envDefault:"false"`
+	Port   int    `env:"PORT" envDefault:"8080"`
+	Target string `env:"TARGET" envDefault:"http://docker"`
 }
 
 var (
@@ -26,4 +28,6 @@ func init() {
 	if err := env.Parse(Config); err != nil {
 		log.Fatal(err)
 	}
+
+	xlog.Infof("Config: %#v", Config)
 }

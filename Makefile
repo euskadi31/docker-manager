@@ -48,5 +48,6 @@ $(EXECUTABLE): $(wildcard *.go)
 
 build: $(EXECUTABLE)
 
-run: build
-	@PORT=1339 DEBUG=true ./$(EXECUTABLE)
+run: docker
+	@docker run -p 8080:8080 --network="bridge" --rm $(IMAGE)
+	#@PORT=1339 DEBUG=true ./$(EXECUTABLE)

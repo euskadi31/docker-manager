@@ -13,8 +13,9 @@ import (
 func init() {
 	lc := xlog.Config{
 		Fields: xlog.F{
-			"Version":  Version,
-			"Revision": Revision,
+			"app":      "docker-manager",
+			"version":  Version,
+			"revision": Revision,
 		},
 		Level:  xlog.LevelInfo,
 		Output: xlog.NewConsoleOutput(),
