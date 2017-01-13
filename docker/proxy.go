@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT
 // license that can be found in the LICENSE file.
 
-package main
+package docker
 
 import (
 	"github.com/docker/go-connections/sockets"
@@ -11,11 +11,6 @@ import (
 	"net/url"
 	"strings"
 )
-
-// Proxy struct
-type Proxy struct {
-	proxy *httputil.ReverseProxy
-}
 
 func singleJoiningSlash(a, b string) string {
 	aslash := strings.HasSuffix(a, "/")
@@ -29,8 +24,8 @@ func singleJoiningSlash(a, b string) string {
 	return a + b
 }
 
-// NewProxy server
-func NewProxy(host string) (*Proxy, error) {
+// New Docker proxy
+func New(host string) (*httputil.ReverseProxy, error) {
 	sock, err := url.Parse(host)
 	if err != nil {
 		return nil, err
@@ -64,20 +59,8 @@ func NewProxy(host string) (*Proxy, error) {
 	transport := new(http.Transport)
 	sockets.ConfigureTransport(transport, sock.Scheme, sock.Path)
 
-	proxy := &httputil.ReverseProxy{
+	return &httputil.ReverseProxy{
 		Director:  director,
 		Transport: transport,
-	}
-
-	return &Proxy{
-		proxy: proxy,
 	}, nil
 }
-
-func (p *Proxy) handle(w http.ResponseWriter, r *http.Request) {
-	p.proxy.ServeHTTP(w, r)
-}
-
-// see http://www.darul.io/post/2015-07-22_go-lang-simple-reverse-proxy
-// url target: http://docker
-// Auth: oauth2/jwt

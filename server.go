@@ -6,18 +6,21 @@ package main
 
 import (
 	"fmt"
+	"github.com/euskadi31/docker-manager/docker"
+	"github.com/gorilla/mux"
 	"github.com/rs/xlog"
 	"net/http"
+	"net/http/httputil"
 )
 
 // Server struct
 type Server struct {
-	proxy *Proxy
+	proxy *httputil.ReverseProxy
 }
 
 // NewServer create a Server
 func NewServer() (*Server, error) {
-	proxy, err := NewProxy(Config.DockerHost)
+	proxy, err := docker.New(Config.DockerHost)
 	if err != nil {
 		return nil, err
 	}
@@ -31,13 +34,16 @@ func NewServer() (*Server, error) {
 func (s *Server) Listen() error {
 	addr := fmt.Sprintf(":%d", Config.Port)
 
-	http.HandleFunc("/health", HealthHandler)
-	http.HandleFunc("/api/", s.proxy.handle)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	router := mux.NewRouter()
+	router.HandleFunc("/health", HealthHandler).Methods("GET", "HEAD")
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("ok"))
+	}).Methods("GET")
+	router.PathPrefix("/api/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.proxy.ServeHTTP(w, r)
 	})
 
 	xlog.Infof("Server running on %s", addr)
 
-	return http.ListenAndServe(addr, nil)
+	return http.ListenAndServe(addr, router)
 }
