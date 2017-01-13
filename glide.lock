@@ -1,8 +1,18 @@
-hash: 0033dd1768970a91586d4f625e70ded6a36e52286763c343198891e061a3e318
-updated: 2017-01-11T14:05:45.547409762+01:00
+hash: effedca678590059743068526bbc86ba83d1040a786e016ea1ca719cbcbb6a57
+updated: 2017-01-13T13:40:36.181912103+01:00
 imports:
 - name: github.com/caarlos0/env
   version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
+- name: github.com/docker/go-connections
+  version: 990a1a1a70b0da4c4cb70e117971a4f0babfbf1a
+  subpackages:
+  - sockets
+- name: github.com/Microsoft/go-winio
+  version: 307e919c663683a9000576fdc855acaf9534c165
+- name: github.com/opencontainers/runc
+  version: a9610f2c0237d2636d05a031ec8659a70e75ffeb
+  subpackages:
+  - libcontainer/user
 - name: github.com/rs/xhandler
   version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
 - name: github.com/rs/xid
@@ -11,8 +21,16 @@ imports:
   version: ee33a676e5f4bbda5b80dace72043f7e3b61ebda
   subpackages:
   - internal/term
+- name: github.com/Sirupsen/logrus
+  version: d26492970760ca5d33129d2d799e34be5c4782eb
 - name: golang.org/x/net
   version: 905989bd20b7c354fd28a61074eed1c8f49ebc89
   subpackages:
   - context
+  - proxy
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+  - windows
 testImports: []

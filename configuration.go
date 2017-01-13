@@ -12,9 +12,9 @@ import (
 
 // Configuration struct
 type Configuration struct {
-	Debug  bool   `env:"DEBUG" envDefault:"false"`
-	Port   int    `env:"PORT" envDefault:"8080"`
-	Target string `env:"TARGET" envDefault:"http://docker"`
+	Debug      bool   `env:"DEBUG" envDefault:"false"`
+	Port       int    `env:"PORT" envDefault:"8080"`
+	DockerHost string `env:"DOCKER_HOST" envDefault:"unix:///var/run/docker.sock"`
 }
 
 var (

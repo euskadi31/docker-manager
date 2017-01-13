@@ -17,7 +17,7 @@ type Server struct {
 
 // NewServer create a Server
 func NewServer() (*Server, error) {
-	proxy, err := NewProxy(Config.Target)
+	proxy, err := NewProxy(Config.DockerHost)
 	if err != nil {
 		return nil, err
 	}

@@ -44,10 +44,11 @@ docker:
 	@docker build --rm -t $(IMAGE) .
 
 $(EXECUTABLE): $(wildcard *.go)
+	@echo "Building $(EXECUTABLE)..."
 	@go build -ldflags '-s -w $(LDFLAGS)'
 
 build: $(EXECUTABLE)
 
 run: docker
-	@docker run -p 8080:8080 --network="bridge" --rm $(IMAGE)
+	@docker run -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock --rm $(IMAGE)
 	#@PORT=1339 DEBUG=true ./$(EXECUTABLE)
