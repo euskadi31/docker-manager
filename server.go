@@ -6,11 +6,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"net/http/httputil"
+
+	"strings"
+
 	"github.com/euskadi31/docker-manager/docker"
 	"github.com/gorilla/mux"
 	"github.com/rs/xlog"
-	"net/http"
-	"net/http/httputil"
 )
 
 // Server struct
@@ -41,6 +44,23 @@ func (s *Server) Listen() error {
 	}).Methods("GET")
 	router.PathPrefix("/api/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		s.proxy.ServeHTTP(w, r)
+	})
+
+	//router.PathPrefix("/ui/").Handler(http.StripPrefix("/ui/", http.FileServer(http.Dir("/opt/docker-manager/ui/"))))
+
+	router.PathPrefix("/ui/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		filename := strings.Replace(r.URL.Path, "/ui/", "/", 1)
+
+		extensions := []string{".js", ".css", ".map", ".ico"}
+		for _, ext := range extensions {
+			if strings.HasSuffix(r.URL.Path, ext) {
+				http.ServeFile(w, r, "/opt/docker-manager/ui/"+filename)
+
+				return
+			}
+		}
+
+		http.ServeFile(w, r, "/opt/docker-manager/ui/index.html")
 	})
 
 	xlog.Infof("Server running on %s", addr)

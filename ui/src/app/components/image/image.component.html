@@ -1,0 +1,32 @@
+
+<panel>
+    <panel-title>Images</panel-title>
+    <panel-action>
+        <button>Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Repository</th>
+                    <th>Tag</th>
+                    <th>Image ID</th>
+                    <th>Created</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let image of images">
+                    <td>{{ image.Repository }}</td>
+                    <td>{{ image.Tag }}</td>
+                    <td>{{ image.Id }}</td>
+                    <td>{{ image.Created | date }}</td>
+                    <td>{{ image.Size | size }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>

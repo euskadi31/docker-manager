@@ -1,0 +1,30 @@
+
+<panel>
+    <panel-title>Services</panel-title>
+    <panel-action>
+        <button>Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Replicas</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let service of services">
+                    <td>{{ service.ID | truncate:12:' ' }}</td>
+                    <td><a [routerLink]="['/service', service.Spec.Name, 'task']">{{ service.Spec.Name }}</a></td>
+                    <td>{{ service.Spec.Mode.Replicated.Replicas }}/{{ service.Spec.Mode.Replicated.Replicas }}</td>
+                    <td>{{ service.Spec.TaskTemplate.ContainerSpec.Image }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>

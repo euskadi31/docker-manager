@@ -1,0 +1,32 @@
+
+<panel>
+    <panel-title>Nodes</panel-title>
+    <panel-action>
+        <button>Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Hostname</th>
+                    <th>Status</th>
+                    <th>Availability</th>
+                    <th>Manager</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let node of nodes">
+                    <td>{{ node.ID }}</td>
+                    <td>{{ node.Description.Hostname }}</td>
+                    <td>{{ node.Status.State }}</td>
+                    <td>{{ node.Spec.Availability }}</td>
+                    <td>{{ node.ManagerStatus.Leader }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>

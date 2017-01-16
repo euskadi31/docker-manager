@@ -1,0 +1,35 @@
+
+<panel>
+    <panel-title>Tasks</panel-title>
+    <panel-action>
+        <button>Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Node</th>
+                    <th>Desired State</th>
+                    <th>Current State</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let task of tasks">
+                    <td>{{ task.ID }}</td>
+                    <td>{{ task.Name }}</td>
+                    <td>{{ task.Spec.ContainerSpec.Image }}</td>
+                    <td>{{ task.NodeID }}</td>
+                    <td>{{ task.DesiredState }}</td>
+                    <td>{{ task.Status.State }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>
+

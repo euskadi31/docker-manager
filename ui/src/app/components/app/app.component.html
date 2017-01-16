@@ -1,0 +1,26 @@
+<div class="app-wrapper">
+    <nav>
+        <header>
+            <h1>Docker Manager</h1>
+        </header>
+        <ul>
+            <li routerLinkActive="active"><a routerLink="/dashboard">Dashboard</a></li>
+            <li routerLinkActive="active"><a routerLink="/network">Network</a></li>
+            <li routerLinkActive="active"><a routerLink="/service">Service</a></li>
+            <li routerLinkActive="active"><a routerLink="/cluster">Cluster</a></li>
+            <li routerLinkActive="active"><a routerLink="/image">Image</a></li>
+        </ul>
+    </nav>
+
+    <div class="main">
+        <header>
+
+        </header>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+
+

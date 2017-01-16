@@ -41,7 +41,7 @@ test:
 
 docker:
 	@GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
-	@docker build --rm -t $(IMAGE) .
+	@sudo docker build --rm -t $(IMAGE) .
 
 $(EXECUTABLE): $(wildcard *.go)
 	@echo "Building $(EXECUTABLE)..."
@@ -50,5 +50,12 @@ $(EXECUTABLE): $(wildcard *.go)
 build: $(EXECUTABLE)
 
 run: docker
-	@docker run -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock --rm $(IMAGE)
+	@sudo docker run -p 8181:8080 -v /var/run/docker.sock:/var/run/docker.sock --rm $(IMAGE)
 	#@PORT=1339 DEBUG=true ./$(EXECUTABLE)
+
+docker-dev:
+	@GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
+	@sudo docker build --rm -t $(IMAGE) -f Dockerfile.dev .
+
+dev: docker-dev
+	@sudo docker run -p 8181:8080 -v /var/run/docker.sock:/var/run/docker.sock -v $(shell pwd)/ui/dist:/opt/docker-manager/ui --rm $(IMAGE)

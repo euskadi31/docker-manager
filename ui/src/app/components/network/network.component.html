@@ -1,0 +1,30 @@
+
+<panel>
+    <panel-title>Network</panel-title>
+    <panel-action>
+        <button>Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Driver</th>
+                    <th>Scope</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let network of networks">
+                    <td>{{ network.Id | truncate:12:' ' }}</td>
+                    <td>{{ network.Name }}</td>
+                    <td>{{ network.Driver }}</td>
+                    <td>{{ network.Scope }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>
