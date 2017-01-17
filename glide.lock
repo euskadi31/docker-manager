@@ -1,5 +1,5 @@
-hash: b9ab180b300244b9e1202b059a6a2bafa889a4cef7f221c2e01df75d31995170
-updated: 2017-01-13T14:42:16.826679442+01:00
+hash: b855bcc17ee7f60cbe297ec71e73c83943f12eb7216ee0e6c2e822f0d1722991
+updated: 2017-01-17T13:52:46.435150773+01:00
 imports:
 - name: github.com/caarlos0/env
   version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
@@ -10,15 +10,15 @@ imports:
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
-  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
-- name: github.com/julienschmidt/httprouter
-  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
+  version: b12896167c61cb7a17ee5f15c2ba0729d78793db
 - name: github.com/Microsoft/go-winio
   version: 307e919c663683a9000576fdc855acaf9534c165
 - name: github.com/opencontainers/runc
   version: a9610f2c0237d2636d05a031ec8659a70e75ffeb
   subpackages:
   - libcontainer/user
+- name: github.com/RangelReale/osin
+  version: e09d96c151a3b30cf01c064f06bf50489fb5efcf
 - name: github.com/rs/xhandler
   version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
 - name: github.com/rs/xid
