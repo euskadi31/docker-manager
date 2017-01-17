@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-    <div class="content">
+    <div [ngClass]="{'content': true, 'no-padding': noPadding }">
         <ng-content select="panel-content"></ng-content>
     </div>
     <div class="footer">
