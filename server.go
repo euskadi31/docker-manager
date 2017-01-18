@@ -11,6 +11,7 @@ import (
 
 	"strings"
 
+	"github.com/RangelReale/osin"
 	"github.com/euskadi31/docker-manager/docker"
 	"github.com/gorilla/mux"
 	"github.com/rs/xlog"
@@ -18,18 +19,22 @@ import (
 
 // Server struct
 type Server struct {
-	proxy *httputil.ReverseProxy
+	proxy  *httputil.ReverseProxy
+	oauth2 *osin.Server
 }
 
 // NewServer create a Server
 func NewServer() (*Server, error) {
+	oauth2 := osin.NewServer(osin.NewServerConfig(), &OAuthStorage{})
+
 	proxy, err := docker.New(Config.DockerHost)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Server{
-		proxy: proxy,
+		proxy:  proxy,
+		oauth2: oauth2,
 	}, nil
 }
 
@@ -62,6 +67,18 @@ func (s *Server) Listen() error {
 
 		http.ServeFile(w, r, "/opt/docker-manager/ui/index.html")
 	})
+
+	// Access token endpoint
+	router.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
+		resp := s.oauth2.NewResponse()
+		defer resp.Close()
+
+		if ar := s.oauth2.HandleAccessRequest(resp, r); ar != nil {
+			ar.Authorized = true
+			s.oauth2.FinishAccessRequest(resp, r, ar)
+		}
+		osin.OutputJSON(resp, w, r)
+	}).Methods("POST")
 
 	xlog.Infof("Server running on %s", addr)
 

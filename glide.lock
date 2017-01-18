@@ -1,5 +1,5 @@
 hash: b855bcc17ee7f60cbe297ec71e73c83943f12eb7216ee0e6c2e822f0d1722991
-updated: 2017-01-17T13:52:46.435150773+01:00
+updated: 2017-01-18T13:34:27.327321958+01:00
 imports:
 - name: github.com/caarlos0/env
   version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
@@ -17,6 +17,8 @@ imports:
   version: a9610f2c0237d2636d05a031ec8659a70e75ffeb
   subpackages:
   - libcontainer/user
+- name: github.com/pborman/uuid
+  version: 1b00554d822231195d1babd97ff4a781231955c9
 - name: github.com/RangelReale/osin
   version: e09d96c151a3b30cf01c064f06bf50489fb5efcf
 - name: github.com/rs/xhandler
