@@ -58,4 +58,4 @@ docker-dev:
 	@sudo docker build --rm -t $(IMAGE) -f Dockerfile.dev .
 
 dev: docker-dev
-	@sudo docker run -p 8181:8080 -v /var/run/docker.sock:/var/run/docker.sock -v $(shell pwd)/ui/dist:/opt/docker-manager/ui --rm $(IMAGE)
+	@sudo docker run --rm -p 8181:8080 -v $(shell pwd)/var/lib/docker-manager:/var/lib/docker-manager -v /var/run/docker.sock:/var/run/docker.sock -v $(shell pwd)/ui/dist:/opt/docker-manager/ui --rm $(IMAGE)

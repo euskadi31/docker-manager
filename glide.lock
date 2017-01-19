@@ -1,16 +1,39 @@
-hash: b855bcc17ee7f60cbe297ec71e73c83943f12eb7216ee0e6c2e822f0d1722991
-updated: 2017-01-18T13:34:27.327321958+01:00
+hash: 7eb0f80b43e25ea1fbd794d2f44de9a7a21bcd9e64ff0a083de8702a692da290
+updated: 2017-01-19T22:23:20.26830629+01:00
 imports:
+- name: github.com/asdine/storm
+  version: faf2c5d33aa0f572fa56e03de17c87b278b976c6
+  subpackages:
+  - codec
+  - codec/json
+  - index
+  - internal
+  - q
+- name: github.com/boltdb/bolt
+  version: 583e8937c61f1af6513608ccc75c97b6abdf4ff9
 - name: github.com/caarlos0/env
   version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
+- name: github.com/docker/docker
+  version: 49bf474f9ed7ce7143a59d1964ff7b7fd9b52178
+  subpackages:
+  - client
 - name: github.com/docker/go-connections
   version: 990a1a1a70b0da4c4cb70e117971a4f0babfbf1a
   subpackages:
   - sockets
+- name: github.com/emirpasic/gods
+  version: ec46b0116df083cba218abbf72522c6d0c065e4e
+  subpackages:
+  - containers
+  - trees
+  - trees/redblacktree
+  - utils
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
-  version: b12896167c61cb7a17ee5f15c2ba0729d78793db
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/justinas/alice
+  version: 052b8b6c18edb9db317af86806d8e00ebaa94160
 - name: github.com/Microsoft/go-winio
   version: 307e919c663683a9000576fdc855acaf9534c165
 - name: github.com/opencontainers/runc

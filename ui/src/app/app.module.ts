@@ -13,6 +13,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { PanelComponent } from './components/panel/panel.component';
 import { ClusterComponent } from './components/cluster/cluster.component';
 import { ImageComponent } from './components/image/image.component';
+import { RegistryComponent } from './components/registry/registry.component';
 
 import { NetworkService } from './services/network.service';
 import { DockerService } from './services/docker.service';
@@ -21,9 +22,12 @@ import { ImageService } from './services/image.service';
 import { SwarmService } from './services/swarm.service';
 import { NodeService } from './services/node.service';
 import { TaskService } from './services/task.service';
+import { RegistryService } from './services/registry.service';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { SizePipe } from './pipes/size.pipe';
+import { DialogComponent } from './components/dialog/dialog.component';
+
 
 
 @NgModule({
@@ -38,7 +42,9 @@ import { SizePipe } from './pipes/size.pipe';
         ClusterComponent,
         ImageComponent,
         ServiceTaskComponent,
-        SizePipe
+        SizePipe,
+        RegistryComponent,
+        DialogComponent
     ],
     imports: [
         BrowserModule,
@@ -53,7 +59,8 @@ import { SizePipe } from './pipes/size.pipe';
         NodeService,
         ImageService,
         SwarmService,
-        TaskService
+        TaskService,
+        RegistryService
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     bootstrap: [AppComponent]

@@ -8,6 +8,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ClusterComponent } from './components/cluster/cluster.component';
 import { ImageComponent } from './components/image/image.component';
 import { ServiceTaskComponent } from './components/service/service-task.component';
+import { RegistryComponent } from './components/registry/registry.component';
+
 
 const appRoutes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
@@ -16,6 +18,7 @@ const appRoutes: Routes = [
     { path: 'service/:name/task', component: ServiceTaskComponent },
     { path: 'cluster', component: ClusterComponent },
     { path: 'image', component: ImageComponent },
+    { path: 'registry', component: RegistryComponent },
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent }
 ];

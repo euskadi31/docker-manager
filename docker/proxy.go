@@ -5,11 +5,12 @@
 package docker
 
 import (
-	"github.com/docker/go-connections/sockets"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
+
+	"github.com/docker/go-connections/sockets"
 )
 
 func singleJoiningSlash(a, b string) string {
@@ -25,7 +26,7 @@ func singleJoiningSlash(a, b string) string {
 }
 
 // New Docker proxy
-func New(host string) (*httputil.ReverseProxy, error) {
+func NewProxy(host string) (*httputil.ReverseProxy, error) {
 	sock, err := url.Parse(host)
 	if err != nil {
 		return nil, err

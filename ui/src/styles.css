@@ -39,6 +39,7 @@ a {
 }
 
 
+
 .loading-spinner {
     display: none;
     position: absolute;
@@ -200,4 +201,17 @@ a {
 .table > tbody > tr:hover > td,
 .table > tbody > tr:hover > th {
     background-color: #e9ebee;
+}
+
+
+.clearfix {
+    zoom: 1;
+}
+
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
 }

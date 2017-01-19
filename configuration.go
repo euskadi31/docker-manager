@@ -5,9 +5,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/caarlos0/env"
 	"github.com/rs/xlog"
-	"log"
 )
 
 // Configuration struct

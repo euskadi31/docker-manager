@@ -1,0 +1,61 @@
+
+<panel [noPadding]=true>
+    <panel-title>Registries</panel-title>
+    <panel-action>
+        <button (click)="addDialog.open()">Add</button>
+    </panel-action>
+    <panel-content>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Host</th>
+                    <th>Login</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let registry of registries">
+                    <td>{{ registry.ID }}</td>
+                    <td>{{ registry.Server }}</td>
+                    <td>{{ registry.Username }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </panel-content>
+    <panel-footer>
+        footer
+    </panel-footer>
+</panel>
+
+
+<ui-dialog #addDialog [width]="445" [top]="40">
+    <dialog-title>Add Registry</dialog-title>
+    <dialog-content>
+        <form>
+            <div class="form-group">
+                <label>Server</label>
+                <input name="server" type="text" required [(ngModel)]="registry.Server" #server="ngModel" />
+                <div [hidden]="server.valid || server.pristine" class="alert alert-danger">
+                    Name is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input name="username" type="text" required [(ngModel)]="registry.Username" #username="ngModel" />
+                <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+                    Login is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input name="password" type="password" required [(ngModel)]="registry.Password" #password="ngModel" />
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                    Password is required
+                </div>
+            </div>
+        </form>
+    </dialog-content>
+    <dialog-footer>
+        <button (click)="onAdd()" type="button">Add</button>
+    </dialog-footer>
+</ui-dialog>
