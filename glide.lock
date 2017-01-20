@@ -1,5 +1,5 @@
-hash: 7eb0f80b43e25ea1fbd794d2f44de9a7a21bcd9e64ff0a083de8702a692da290
-updated: 2017-01-19T22:23:20.26830629+01:00
+hash: d71dccecebcff444160a89339740c4ad64029094130c1f594c2c66a9d372b782
+updated: 2017-01-20T13:28:05.789617451+01:00
 imports:
 - name: github.com/asdine/storm
   version: faf2c5d33aa0f572fa56e03de17c87b278b976c6
@@ -13,14 +13,38 @@ imports:
   version: 583e8937c61f1af6513608ccc75c97b6abdf4ff9
 - name: github.com/caarlos0/env
   version: d0de832ed2fbc4e7bfaa30ab5cf0b3417d15f529
+- name: github.com/docker/distribution
+  version: 56b712f454ca9895425cd42d3a0a31e5ba08ba1f
+  subpackages:
+  - digestset
+  - reference
 - name: github.com/docker/docker
   version: 49bf474f9ed7ce7143a59d1964ff7b7fd9b52178
   subpackages:
+  - api/types
+  - api/types/blkiodev
+  - api/types/container
+  - api/types/events
+  - api/types/filters
+  - api/types/mount
+  - api/types/network
+  - api/types/reference
+  - api/types/registry
+  - api/types/strslice
+  - api/types/swarm
+  - api/types/time
+  - api/types/versions
+  - api/types/volume
   - client
+  - pkg/tlsconfig
 - name: github.com/docker/go-connections
   version: 990a1a1a70b0da4c4cb70e117971a4f0babfbf1a
   subpackages:
+  - nat
   - sockets
+  - tlsconfig
+- name: github.com/docker/go-units
+  version: e30f1e79f3cd72542f2026ceec18d3bd67ab859c
 - name: github.com/emirpasic/gods
   version: ec46b0116df083cba218abbf72522c6d0c065e4e
   subpackages:
@@ -36,12 +60,16 @@ imports:
   version: 052b8b6c18edb9db317af86806d8e00ebaa94160
 - name: github.com/Microsoft/go-winio
   version: 307e919c663683a9000576fdc855acaf9534c165
+- name: github.com/opencontainers/go-digest
+  version: 21dfd564fd89c944783d00d069f33e3e7123c448
 - name: github.com/opencontainers/runc
   version: a9610f2c0237d2636d05a031ec8659a70e75ffeb
   subpackages:
   - libcontainer/user
 - name: github.com/pborman/uuid
   version: 1b00554d822231195d1babd97ff4a781231955c9
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/RangelReale/osin
   version: e09d96c151a3b30cf01c064f06bf50489fb5efcf
 - name: github.com/rs/xhandler
@@ -58,6 +86,7 @@ imports:
   version: 905989bd20b7c354fd28a61074eed1c8f49ebc89
   subpackages:
   - context
+  - context/ctxhttp
   - proxy
 - name: golang.org/x/sys
   version: d75a52659825e75fff6158388dddc6a5b04f9ba5

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 
+	"github.com/pkg/errors"
 	"strings"
 
 	// "github.com/RangelReale/osin"
@@ -23,6 +24,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
 	"github.com/rs/xlog"
+	"strconv"
 )
 
 // Server struct
@@ -140,12 +142,19 @@ func (s *Server) Listen() error {
 	router.Handle("/api/registries/{id:[0-9]+}/repositories", middleware.ThenFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 
+		ID, err := strconv.Atoi(vars["id"])
+		if err != nil {
+			server.NotFoundFailure(w, r)
+
+			return
+		}
+
 		db := StormFromContext(r.Context())
 
 		var registry entity.Registry
 
-		if err := db.One("ID", vars["id"], &registry); err != nil {
-			server.FailureFromError(w, http.StatusNotFound, err)
+		if err := db.One("ID", ID, &registry); err != nil {
+			server.FailureFromError(w, http.StatusNotFound, errors.Wrapf(err, "Cannot find registry by ID: %d", ID))
 
 			return
 		}
@@ -157,9 +166,18 @@ func (s *Server) Listen() error {
 			return
 		}
 
-		defer req.Body.Close()
+		httpClient := &http.Client{}
 
-		b, err := ioutil.ReadAll(req.Body)
+		resp, err := httpClient.Do(req)
+		if err != nil {
+			server.FailureFromError(w, http.StatusInternalServerError, err)
+
+			return
+		}
+
+		defer resp.Body.Close()
+
+		b, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			server.FailureFromError(w, http.StatusInternalServerError, err)
 
