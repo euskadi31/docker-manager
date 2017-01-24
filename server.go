@@ -10,11 +10,14 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/pkg/errors"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	// "github.com/RangelReale/osin"
 	"io/ioutil"
+
+	"strconv"
 
 	"github.com/asdine/storm"
 	"github.com/docker/docker/client"
@@ -24,7 +27,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
 	"github.com/rs/xlog"
-	"strconv"
 )
 
 // Server struct
@@ -165,6 +167,9 @@ func (s *Server) Listen() error {
 
 			return
 		}
+
+		// Add header with json of username and password
+		req.SetBasicAuth(registry.Username, registry.Password)
 
 		httpClient := &http.Client{}
 
