@@ -59,3 +59,7 @@ docker-dev:
 
 dev: docker-dev
 	@sudo docker run --rm -p 8181:8080 -v $(shell pwd)/var/lib/docker-manager:/var/lib/docker-manager -v /var/run/docker.sock:/var/run/docker.sock -v $(shell pwd)/ui/dist:/opt/docker-manager/ui --rm $(IMAGE)
+
+stack-demo:
+	#@sudo docker stack rm demo;
+	@sudo docker stack deploy demo --compose-file demo/docker-compose.yml

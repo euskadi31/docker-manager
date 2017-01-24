@@ -12,6 +12,7 @@
                     <th>Name</th>
                     <th>Replicas</th>
                     <th>Image</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,7 @@
                     <td><a [routerLink]="['/service', service.Spec.Name, 'task']">{{ service.Spec.Name }}</a></td>
                     <td>{{ service.Spec.Mode.Replicated.Replicas }}/{{ service.Spec.Mode.Replicated.Replicas }}</td>
                     <td>{{ service.Spec.TaskTemplate.ContainerSpec.Image }}</td>
+                    <td><a [routerLink]="['/service', service.Spec.Name, 'log']">Log</a></td>
                 </tr>
             </tbody>
         </table>

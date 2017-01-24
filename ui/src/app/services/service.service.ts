@@ -11,4 +11,16 @@ export class ServiceService {
     getServices(): Promise<Service[]> {
         return this.dockerService.get("/services").then(response => response.json() as Service[]);
     }
+
+    getLogs(name): Promise<string[]> {
+        return this.dockerService.get(`/services/${name}/logs?stdout=true`).then(response => {
+            return response.text().split('\n')
+        });
+    }
+
+    getLogsByTimestamp(name, since): Promise<string[]> {
+        return this.dockerService.get(`/services/${name}/logs?stdout=true&since=${since}`).then(response => {
+            return response.text().split('\n')
+        });
+    }
 }

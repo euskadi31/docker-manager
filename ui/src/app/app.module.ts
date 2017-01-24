@@ -14,6 +14,7 @@ import { PanelComponent } from './components/panel/panel.component';
 import { ClusterComponent } from './components/cluster/cluster.component';
 import { ImageComponent } from './components/image/image.component';
 import { RegistryComponent } from './components/registry/registry.component';
+import { ServiceLogComponent } from './components/service/service-log.component';
 
 import { NetworkService } from './services/network.service';
 import { DockerService } from './services/docker.service';
@@ -44,7 +45,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
         ServiceTaskComponent,
         SizePipe,
         RegistryComponent,
-        DialogComponent
+        DialogComponent,
+        ServiceLogComponent
     ],
     imports: [
         BrowserModule,
