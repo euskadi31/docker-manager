@@ -29,6 +29,7 @@ import { WebSocketService } from './services/websocket.service';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { SizePipe } from './pipes/size.pipe';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { ConsoleComponent } from './components/console/console.component';
 
 
 
@@ -47,7 +48,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
         SizePipe,
         RegistryComponent,
         DialogComponent,
-        ServiceLogComponent
+        ServiceLogComponent,
+        ConsoleComponent
     ],
     imports: [
         BrowserModule,

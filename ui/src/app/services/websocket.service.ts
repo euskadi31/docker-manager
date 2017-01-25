@@ -1,38 +1,114 @@
-import { Injectable } from '@angular/core';
-import * as Rx from 'rxjs/Rx';
+import { Injectable, NgZone } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+export enum WebSocketState {
+    Connecting = 0,
+    Connected,
+    Disconnecting,
+    Disconnected,
+}
+
+export enum WebSocketCloseCode {
+    Normal          = 1000,
+    GoingAway       = 1001,
+    ProtocolError   = 1002,
+    Unsupported     = 1003,
+    NoStatus        = 1005,
+    Abnormal        = 1006,
+    TooLarge        = 1009
+}
 
 @Injectable()
 export class WebSocketService {
-    private subject: Rx.Subject<MessageEvent>;
+    private pingTimer: number;
+    private pongTimer: number;
+    private ws: WebSocket;
+    private state: WebSocketState;
+    private url: string;
 
-    public connect(url): Rx.Subject<MessageEvent> {
-		if (!this.subject) {
-			this.subject = this.create(url);
-		}
+    private stateSource: Subject<WebSocketState> = new Subject<WebSocketState>();
+    private messageSource: Subject<MessageEvent> = new Subject<MessageEvent>();
 
-		return this.subject;
-	}
+    public state$ = this.stateSource.asObservable();
+    public message$ = this.messageSource.asObservable();
 
-	private create(url): Rx.Subject<MessageEvent> {
-		let ws = new WebSocket(url);
 
-		let observable = Rx.Observable.create(
-			(obs: Rx.Observer<MessageEvent>) => {
-				ws.onmessage = obs.next.bind(obs);
-				ws.onerror = obs.error.bind(obs);
-				ws.onclose = obs.complete.bind(obs);
 
-				return ws.close.bind(ws);
-			})
+    constructor() {
+        this.state = WebSocketState.Disconnected;
 
-		let observer = {
-			next: (data: Object) => {
-				if (ws.readyState === WebSocket.OPEN) {
-					ws.send(JSON.stringify(data));
-				}
-			}
-		}
+        window.addEventListener('offline', () => {
+            this.close();
+        }, false);
 
-		return Rx.Subject.create(observer, observable);
-	}
+        window.addEventListener('online', () => {
+            if (this.state === WebSocketState.Disconnected) {
+                setTimeout(() => this.connect(), 200);
+            }
+        }, false);
+    }
+
+    public changeState(state: WebSocketState) {
+        this.state = state;
+        this.stateSource.next(state);
+    }
+
+    public connect(url?: string) {
+        this.changeState(WebSocketState.Connecting);
+
+        if (url) {
+            this.url = url;
+        }
+
+        this.ws = new WebSocket(this.url);
+
+        this.ws.addEventListener('open', (event) => {
+            this.changeState(WebSocketState.Connected);
+
+            this.pingTimer = window.setInterval(() => {
+                this.send('{"type":"ping"}');
+
+                this.pongTimer = window.setTimeout(() => {
+                    this.close();
+                }, 10000);
+            }, 30000);
+        });
+
+        this.ws.addEventListener('error', (event) => {
+            this.messageSource.error(event);
+        });
+
+        this.ws.addEventListener('close', (event: CloseEvent) => {
+            this.ws = null;
+
+            this.changeState(WebSocketState.Disconnected);
+
+            this.messageSource.complete();
+        });
+
+        this.ws.addEventListener('message', (event: MessageEvent) => {
+            if (event.data === '{"type":"pong"}') {
+                window.clearTimeout(this.pongTimer);
+            } else {
+                this.messageSource.next(event);
+            }
+        });
+    }
+
+    public send(data: string) {
+        if (this.state !== WebSocketState.Connected) {
+            return;
+        }
+
+        this.ws.send(data);
+    }
+
+    public close() {
+        this.changeState(WebSocketState.Disconnecting);
+
+        window.clearInterval(this.pingTimer);
+        window.clearTimeout(this.pongTimer);
+
+        this.ws.close(WebSocketCloseCode.Normal);
+    }
 }

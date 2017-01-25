@@ -3,12 +3,7 @@
     <panel-title>Log</panel-title>
     <panel-action></panel-action>
     <panel-content>
-        <ul class="console">
-            <li *ngFor="let log of logs">
-                <span class="log-message">{{ log.Message }}</span>
-                <span class="log-timestamp">{{ log.Timestamp }}</span>
-            </li>
-        </ul>
+        <console [items]="logs"></console>
     </panel-content>
     <panel-footer></panel-footer>
 </panel>

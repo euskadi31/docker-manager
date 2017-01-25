@@ -105,6 +105,13 @@ func NewDockerLog(b []byte) *DockerLog {
 }
 
 var (
+	PONG = []byte(`{"type":"pong"}`)
+	PING = []byte(`{"type":"ping"}`)
+)
+
+const maxMessageSize = 10240
+
+var (
 	upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -284,12 +291,36 @@ func (s *Server) Listen() error {
 	router.Handle("/ws/container/{id}/log", middleware.ThenFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 
-		conn, err := upgrader.Upgrade(w, r, nil)
+		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			server.FailureFromError(w, http.StatusInternalServerError, err)
 
 			return
 		}
+
+		go func() {
+			ws.SetReadLimit(maxMessageSize)
+
+			for {
+				_, msg, err := ws.ReadMessage()
+				if err != nil {
+					if websocket.IsUnexpectedCloseError(
+						err,
+						websocket.CloseNormalClosure,
+						websocket.CloseGoingAway,
+					) {
+						xlog.Error(err)
+					}
+					break
+				}
+
+				if bytes.Compare(msg, PING) == 0 {
+					ws.WriteMessage(websocket.TextMessage, PONG)
+				}
+
+				time.Sleep(time.Millisecond * 500)
+			}
+		}()
 
 		ctx := r.Context()
 
@@ -318,7 +349,7 @@ func (s *Server) Listen() error {
 					continue
 				}
 
-				conn.WriteMessage(websocket.TextMessage, b)
+				ws.WriteMessage(websocket.TextMessage, b)
 			} else {
 				time.Sleep(time.Millisecond * 1000)
 			}
@@ -328,12 +359,36 @@ func (s *Server) Listen() error {
 	router.Handle("/ws/service/{name}/log", middleware.ThenFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 
-		conn, err := upgrader.Upgrade(w, r, nil)
+		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			server.FailureFromError(w, http.StatusInternalServerError, err)
 
 			return
 		}
+
+		go func() {
+			ws.SetReadLimit(maxMessageSize)
+
+			for {
+				_, msg, err := ws.ReadMessage()
+				if err != nil {
+					if websocket.IsUnexpectedCloseError(
+						err,
+						websocket.CloseNormalClosure,
+						websocket.CloseGoingAway,
+					) {
+						xlog.Error(err)
+					}
+					break
+				}
+
+				if bytes.Compare(msg, PING) == 0 {
+					ws.WriteMessage(websocket.TextMessage, PONG)
+				}
+
+				time.Sleep(time.Millisecond * 500)
+			}
+		}()
 
 		ctx := r.Context()
 
@@ -364,7 +419,7 @@ func (s *Server) Listen() error {
 					continue
 				}
 
-				conn.WriteMessage(websocket.TextMessage, b)
+				ws.WriteMessage(websocket.TextMessage, b)
 			} else {
 				time.Sleep(time.Millisecond * 1000)
 			}
@@ -372,12 +427,36 @@ func (s *Server) Listen() error {
 	}))
 
 	router.Handle("/ws/events", middleware.ThenFunc(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := upgrader.Upgrade(w, r, nil)
+		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			server.FailureFromError(w, http.StatusInternalServerError, err)
 
 			return
 		}
+
+		go func() {
+			ws.SetReadLimit(maxMessageSize)
+
+			for {
+				_, msg, err := ws.ReadMessage()
+				if err != nil {
+					if websocket.IsUnexpectedCloseError(
+						err,
+						websocket.CloseNormalClosure,
+						websocket.CloseGoingAway,
+					) {
+						xlog.Error(err)
+					}
+					break
+				}
+
+				if bytes.Compare(msg, PING) == 0 {
+					ws.WriteMessage(websocket.TextMessage, PONG)
+				}
+
+				time.Sleep(time.Millisecond * 500)
+			}
+		}()
 
 		dc := DockerFromContext(r.Context())
 
@@ -390,7 +469,7 @@ func (s *Server) Listen() error {
 				if err != nil {
 					continue
 				}
-				conn.WriteMessage(websocket.TextMessage, b)
+				ws.WriteMessage(websocket.TextMessage, b)
 			case <-errq:
 				return
 			}
