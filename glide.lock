@@ -1,5 +1,5 @@
-hash: a975791b9507f06d6ae47484284c8c5b90cb22c2f13899b8c5cb88777cbada27
-updated: 2017-01-24T21:57:10.536770846+01:00
+hash: 22f12b1fc34b93b143700b9cd0568e56a3f41f4bf46d453e03d4c05e4ff2fa60
+updated: 2017-01-25T13:19:19.78352148+01:00
 imports:
 - name: github.com/asdine/storm
   version: faf2c5d33aa0f572fa56e03de17c87b278b976c6
@@ -82,6 +82,8 @@ imports:
   version: ee33a676e5f4bbda5b80dace72043f7e3b61ebda
   subpackages:
   - internal/term
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/Sirupsen/logrus
   version: d26492970760ca5d33129d2d799e34be5c4782eb
 - name: golang.org/x/net
