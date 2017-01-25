@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 
 import { Task } from '../../entities/task';
 
@@ -12,14 +13,23 @@ import { TaskService } from '../../services/task.service';
 export class ServiceTaskComponent implements OnInit {
     tasks: Task[];
 
-    constructor(private taskService: TaskService) {
+    constructor(
+        private taskService: TaskService,
+        private activatedRoute: ActivatedRoute
+    ) {
         this.tasks = [];
     }
 
-    ngOnInit() {
-        this.taskService.getTasks('app').then(tasks => {
+    fetchTask(name) {
+        this.taskService.getTasks(name).then(tasks => {
             console.log(tasks);
             this.tasks = tasks;
+        });
+    }
+
+    ngOnInit() {
+        this.activatedRoute.params.subscribe((params: Params) => {
+            this.fetchTask(params['name']);
         });
     }
 

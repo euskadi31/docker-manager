@@ -1,10 +1,13 @@
 
-<panel [noPadding]=true>
+<panel [noPadding]=false>
     <panel-title>Log</panel-title>
     <panel-action></panel-action>
     <panel-content>
-        <ul>
-            <li *ngFor="let log of logs">{{ log }}</li>
+        <ul class="console">
+            <li *ngFor="let log of logs">
+                <span class="log-message">{{ log.Message }}</span>
+                <span class="log-timestamp">{{ log.Timestamp }}</span>
+            </li>
         </ul>
     </panel-content>
     <panel-footer></panel-footer>

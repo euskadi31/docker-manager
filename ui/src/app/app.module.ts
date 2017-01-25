@@ -24,6 +24,7 @@ import { SwarmService } from './services/swarm.service';
 import { NodeService } from './services/node.service';
 import { TaskService } from './services/task.service';
 import { RegistryService } from './services/registry.service';
+import { WebSocketService } from './services/websocket.service';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { SizePipe } from './pipes/size.pipe';
@@ -62,7 +63,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
         ImageService,
         SwarmService,
         TaskService,
-        RegistryService
+        RegistryService,
+        WebSocketService
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     bootstrap: [AppComponent]

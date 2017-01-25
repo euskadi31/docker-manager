@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { Task } from '../entities/task';
+import { Log } from '../entities/log';
 
 import { DockerService } from './docker.service';
 
@@ -8,8 +10,25 @@ import { DockerService } from './docker.service';
 export class TaskService {
     constructor(private dockerService: DockerService) { }
 
+    getLogs(id: string): Promise<Log[]> {
+        return new Promise((resolve, reject) => {
+            let protocol = (location.protocol === 'http:') ? 'ws:' : 'wss:';
+
+            var ws = new WebSocket(`${protocol}//${location.host}/ws/container/${id}/log`);
+            ws.addEventListener('error', () => reject("error"));
+            ws.addEventListener('close', (event) => reject(event.reason))
+            ws.addEventListener('message', (event) => resolve(JSON.parse(event.data)), false);
+        })
+    }
+
     getTasks(service_name: string): Promise<Task[]> {
-        return this.dockerService.get(`/tasks?service=${service_name}`)
+        let filters = {
+            service: [
+                service_name
+            ]
+        };
+
+        return this.dockerService.get(`/tasks?filters=${JSON.stringify(filters)}`)
             .then(response => response.json() as Task[])
             .then(tasks => {
                 return tasks.map(task => {

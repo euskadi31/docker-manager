@@ -55,6 +55,8 @@ func NewProxy(host string) (*httputil.ReverseProxy, error) {
 			// explicitly disable User-Agent so it's not set to default value
 			req.Header.Set("User-Agent", "")
 		}
+
+		req.Header.Set("Origin", "http://docker")
 	}
 
 	transport := new(http.Transport)

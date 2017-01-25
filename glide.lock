@@ -1,5 +1,5 @@
-hash: d71dccecebcff444160a89339740c4ad64029094130c1f594c2c66a9d372b782
-updated: 2017-01-24T13:26:25.295733634+01:00
+hash: a975791b9507f06d6ae47484284c8c5b90cb22c2f13899b8c5cb88777cbada27
+updated: 2017-01-24T21:57:10.536770846+01:00
 imports:
 - name: github.com/asdine/storm
   version: faf2c5d33aa0f572fa56e03de17c87b278b976c6
@@ -56,6 +56,8 @@ imports:
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/mux
   version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/gorilla/websocket
+  version: 3ab3a8b8831546bd18fd182c20687ca853b2bb13
 - name: github.com/justinas/alice
   version: 052b8b6c18edb9db317af86806d8e00ebaa94160
 - name: github.com/Microsoft/go-winio
@@ -88,6 +90,7 @@ imports:
   - context
   - context/ctxhttp
   - proxy
+  - websocket
 - name: golang.org/x/sys
   version: d75a52659825e75fff6158388dddc6a5b04f9ba5
   subpackages:
