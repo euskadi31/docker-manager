@@ -2,6 +2,7 @@ package docker
 
 import (
 	"bytes"
+	"errors"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ type DockerLog struct {
 }
 
 // ParseLog of docker log
-func ParseLog(b []byte) *DockerLog {
+func ParseLog(b []byte) (*DockerLog, error) {
 	// It is encoded on the first 8 bytes like this:
 	//
 	// header := [8]byte{STREAM_TYPE, 0, 0, 0, SIZE1, SIZE2, SIZE3, SIZE4}
@@ -45,13 +46,19 @@ func ParseLog(b []byte) *DockerLog {
 
 	//xlog.Debugf("Docker Log: %s", string(buf.Bytes()))
 
-	logmsg := bytes.SplitN(buf.Bytes(), []byte(" - - "), 2)
+	msg := buf.Bytes()
 
-	part := bytes.SplitN(logmsg[0], []byte(" "), 3)
+	if len(msg) == 0 {
+		return nil, errors.New("Log line empty")
+	}
+
+	logmsg := bytes.SplitN(msg, []byte(" "), 3)
+
+	//part := bytes.SplitN(logmsg[0], []byte(" "), 2)
 
 	labels := make(map[string]string)
 
-	l := string(part[1])
+	l := string(logmsg[1])
 
 	if l != "" {
 		items := strings.Split(l, ",")
@@ -69,8 +76,8 @@ func ParseLog(b []byte) *DockerLog {
 	return &DockerLog{
 		Type:      t,
 		Labels:    labels,
-		Timestamp: string(part[0]),
-		IP:        string(part[2]),
-		Message:   string(logmsg[1]),
-	}
+		Timestamp: string(logmsg[0]),
+		//IP:        string(part[2]),
+		Message: string(logmsg[2]),
+	}, nil
 }

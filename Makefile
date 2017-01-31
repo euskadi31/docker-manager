@@ -43,6 +43,10 @@ docker:
 	@GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-s -w $(LDFLAGS)'
 	@sudo docker build --rm -t $(IMAGE) .
 
+publish: docker
+	@sudo docker tag $(IMAGE) $(IMAGE):latest
+	@sudo docker push $(IMAGE)
+
 $(EXECUTABLE): $(wildcard *.go)
 	@echo "Building $(EXECUTABLE)..."
 	@go build -ldflags '-s -w $(LDFLAGS)'
@@ -58,7 +62,13 @@ docker-dev:
 	@sudo docker build --rm -t $(IMAGE) -f Dockerfile.dev .
 
 dev: docker-dev
-	@sudo docker run --rm -p 8181:8080 -v $(shell pwd)/var/lib/docker-manager:/var/lib/docker-manager -v /var/run/docker.sock:/var/run/docker.sock -v $(shell pwd)/ui/dist:/opt/docker-manager/ui --rm $(IMAGE)
+	@sudo docker run --rm -p 8181:8080 \
+		-e "USERNAME=dacteev" \
+		-e "PASSWORD=test" \
+		-v $(shell pwd)/var/lib/docker-manager:/var/lib/docker-manager \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v $(shell pwd)/ui/dist:/opt/docker-manager/ui \
+		--rm $(IMAGE)
 
 stack-demo:
 	#@sudo docker stack rm demo;

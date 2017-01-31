@@ -1,16 +1,18 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+
 	"github.com/euskadi31/docker-manager/database"
 	"github.com/euskadi31/docker-manager/entity"
 	"github.com/euskadi31/docker-manager/server"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/rs/xlog"
-	"io/ioutil"
-	"net/http"
-	"strconv"
 )
 
 type ApiController struct {
@@ -22,6 +24,7 @@ func NewApiController() (*ApiController, error) {
 
 func (c ApiController) Mount(r *server.Router) {
 	r.AddRouteFunc("/api/registries", c.GetRegistriesHandler).Methods("GET")
+	r.AddRouteFunc("/api/registries", c.PostRegistryHandler).Methods("POST")
 	r.AddRouteFunc("/api/registries/{id:[0-9]+}", c.PutRegistryHandler).Methods("PUT")
 	r.AddRouteFunc("/api/registries/{id:[0-9]+}", c.DeleteRegistryHandler).Methods("DELETE")
 	r.AddRouteFunc("/api/registries/{id:[0-9]+}/repositories", c.GetRegistryRepositoriesHandler).Methods("GET")
@@ -44,6 +47,50 @@ func (c ApiController) GetRegistriesHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	server.JSON(w, http.StatusOK, registries)
+}
+
+// PostRegistryHandler /api/registries
+func (c ApiController) PostRegistryHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var registry entity.Registry
+
+	if err := json.NewDecoder(r.Body).Decode(&registry); err != nil {
+		server.FailureFromError(w, http.StatusBadRequest, err)
+
+		return
+	}
+	defer r.Body.Close()
+
+	/*dc := DockerFromContext(ctx)
+
+	auth, err := dc.RegistryLogin(ctx, types.AuthConfig{
+		Username:      registry.Username,
+		Password:      registry.Password,
+		ServerAddress: "https://" + registry.Server + "/v2/",
+	})
+	if err != nil {
+		server.FailureFromError(w, http.StatusBadRequest, err)
+
+		return
+	}
+
+	xlog.Debugf("Auth Registry: %#v", auth)
+	*/
+	db, err := database.FromContext(ctx)
+	if err != nil {
+		server.FailureFromError(w, http.StatusInternalServerError, err)
+
+		return
+	}
+
+	if err := db.Save(&registry); err != nil {
+		server.FailureFromError(w, http.StatusInternalServerError, err)
+
+		return
+	}
+
+	server.JSON(w, http.StatusCreated, registry)
 }
 
 // PutRegistryHandler /api/registries/{id:[0-9]+}

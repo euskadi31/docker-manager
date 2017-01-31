@@ -5,14 +5,15 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/docker/docker/api/types"
 	"github.com/euskadi31/docker-manager/docker"
 	"github.com/euskadi31/docker-manager/server"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"github.com/rs/xlog"
-	"net/http"
-	"time"
 )
 
 var (
@@ -104,7 +105,12 @@ func (c WsController) ContainerLogHandler(w http.ResponseWriter, r *http.Request
 
 	for {
 		if scanner.Scan() {
-			b, err := json.Marshal(docker.ParseLog(scanner.Bytes()))
+			msg, err := docker.ParseLog(scanner.Bytes())
+			if err != nil {
+				continue
+			}
+
+			b, err := json.Marshal(msg)
 			if err != nil {
 				continue
 			}
@@ -180,7 +186,12 @@ func (c WsController) ServiceLogHandler(w http.ResponseWriter, r *http.Request) 
 
 	for {
 		if scanner.Scan() {
-			b, err := json.Marshal(docker.ParseLog(scanner.Bytes()))
+			msg, err := docker.ParseLog(scanner.Bytes())
+			if err != nil {
+				continue
+			}
+
+			b, err := json.Marshal(msg)
 			if err != nil {
 				continue
 			}

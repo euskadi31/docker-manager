@@ -31,7 +31,7 @@ export class ServiceLogComponent implements OnInit, OnDestroy {
 
             const protocol = (location.protocol === 'http:') ? 'ws:' : 'wss:';
 
-            const url = `${protocol}//${location.host}/ws/service/${service}/log`;
+            const url = `${protocol}//${location.host}/ws/services/${service}/logs`;
 
             this.websocketService.connect(url);
 

@@ -5,8 +5,56 @@
 package main
 
 import (
+	"encoding/base64"
+	"net/http"
+	"strings"
+
 	"github.com/RangelReale/osin"
 )
+
+func NewAuthHandler(config *Configuration) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+			// Skip health endpoint
+			if r.URL.Path == "/health" {
+				next.ServeHTTP(w, r)
+
+				return
+			}
+
+			w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
+
+			s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+			if len(s) != 2 {
+				http.Error(w, "Not authorized", 401)
+				return
+			}
+
+			b, err := base64.StdEncoding.DecodeString(s[1])
+			if err != nil {
+				http.Error(w, err.Error(), 401)
+
+				return
+			}
+
+			pair := strings.SplitN(string(b), ":", 2)
+			if len(pair) != 2 {
+				http.Error(w, "Not authorized", 401)
+
+				return
+			}
+
+			if pair[0] != config.Username || pair[1] != config.Password {
+				http.Error(w, "Not authorized", 401)
+
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
 
 type OAuthStorage struct {
 }

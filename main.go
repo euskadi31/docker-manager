@@ -6,6 +6,8 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/asdine/storm"
 	"github.com/docker/docker/client"
 	"github.com/euskadi31/docker-manager/controller"
@@ -13,7 +15,6 @@ import (
 	"github.com/euskadi31/docker-manager/docker"
 	"github.com/euskadi31/docker-manager/server"
 	"github.com/rs/xlog"
-	"net/http"
 )
 
 func main() {
@@ -30,8 +31,12 @@ func main() {
 	}
 
 	router := server.NewRouter()
+	router.Use(NewAuthHandler(Config))
 	router.Use(database.NewHandler(db))
 	router.Use(docker.NewHandler(dc))
+
+	router.EnableHealthCheck()
+	router.AddHealthCheck("docker", docker.NewHealthCheck())
 
 	dockerController, err := controller.NewDockerController(Config.DockerHost)
 	if err != nil {

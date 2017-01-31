@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
 	//"github.com/rs/xlog"
@@ -9,14 +11,44 @@ import (
 
 type Router struct {
 	*mux.Router
-	middleware alice.Chain
+	middleware   alice.Chain
+	healthchecks map[string]HealthCheckHandler
 }
 
 // NewRouter constructor
 func NewRouter() *Router {
 	return &Router{
-		Router: mux.NewRouter(),
+		Router:       mux.NewRouter(),
+		healthchecks: make(map[string]HealthCheckHandler),
 	}
+}
+
+// AddHealthCheck handler
+func (r *Router) AddHealthCheck(name string, handle HealthCheckHandler) error {
+	if _, ok := r.healthchecks[name]; ok {
+		return fmt.Errorf("the %s healthcheck handler already exists", name)
+	}
+
+	r.healthchecks[name] = handle
+
+	return nil
+}
+
+// EnableHealthCheck endpoint
+func (r *Router) EnableHealthCheck() {
+	r.AddRouteFunc("/health", r.healthHandler).Methods("GET", "HEAD")
+}
+
+func (r *Router) healthHandler(w http.ResponseWriter, req *http.Request) {
+	code := http.StatusOK
+
+	response := healthCheckProcessor(req.Context(), r.healthchecks)
+
+	if !response.Status {
+		code = http.StatusServiceUnavailable
+	}
+
+	JSON(w, code, response)
 }
 
 func (r *Router) Use(middleware ...alice.Constructor) {
@@ -28,17 +60,17 @@ func (r *Router) AddController(controller Controller) {
 }
 
 func (r *Router) AddRoute(path string, handler http.Handler) *mux.Route {
-	return r.Handle(path, handler)
+	return r.Handle(path, r.middleware.Then(handler))
 }
 
 func (r *Router) AddRouteFunc(path string, handler http.HandlerFunc) *mux.Route {
-	return r.Handle(path, handler)
+	return r.Handle(path, r.middleware.ThenFunc(handler))
 }
 
 func (r *Router) AddPrefixRoute(prefix string, handler http.Handler) *mux.Route {
-	return r.PathPrefix(prefix).Handler(handler)
+	return r.PathPrefix(prefix).Handler(r.middleware.Then(handler))
 }
 
 func (r *Router) AddPrefixRouteFunc(prefix string, handler http.HandlerFunc) *mux.Route {
-	return r.PathPrefix(prefix).HandlerFunc(handler)
+	return r.PathPrefix(prefix).Handler(r.middleware.ThenFunc(handler))
 }

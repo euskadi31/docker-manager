@@ -16,6 +16,8 @@ type Configuration struct {
 	Debug      bool   `env:"DEBUG" envDefault:"false"`
 	Port       int    `env:"PORT" envDefault:"8080"`
 	DockerHost string `env:"DOCKER_HOST" envDefault:"unix:///var/run/docker.sock"`
+	Username   string `env:"USERNAME"`
+	Password   string `env:"PASSWORD"`
 }
 
 var (
