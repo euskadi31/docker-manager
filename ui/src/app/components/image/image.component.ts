@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Image } from '../../entities/image';
 
 import { ImageService } from '../../services/image.service';
+import { EventService } from '../../services/event.service';
 
 @Component({
     selector: 'app-image',
@@ -12,15 +14,39 @@ import { ImageService } from '../../services/image.service';
 export class ImageComponent implements OnInit {
     images: Image[];
 
-    constructor(private imageService: ImageService) {
+    private subscription: Subscription;
+
+    constructor(private imageService: ImageService, private eventService: EventService) {
         this.images = [];
     }
 
-    ngOnInit() {
+    fetchImages() {
         this.imageService.getImages().then(images => {
             console.log(images);
             this.images = images;
         });
+    }
+
+    ngOnInit() {
+        this.fetchImages();
+
+        this.subscription = this.eventService.event.filter((event): boolean => {
+            return (event.Action == 'pull' && event.Type == 'image');
+        }).subscribe((event: any) => {
+            console.log('pull:', event.id);
+
+            this.fetchImages();
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    pull(image: Image) {
+        console.log(image);
+
+        this.imageService.pull(image.Repository);
     }
 
 }

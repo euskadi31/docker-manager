@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { WebSocketService } from '../../services/websocket.service';
+import { EventService } from '../../services/event.service';
 
 @Component({
     selector: 'app-root',
@@ -8,23 +8,15 @@ import { WebSocketService } from '../../services/websocket.service';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    constructor(private websocketService: WebSocketService) {}
+    constructor(private eventService: EventService) {}
 
     ngOnInit() {
-        const protocol = (location.protocol === 'http:') ? 'ws:' : 'wss:';
-
-        const url = `${protocol}//${location.host}/ws/events`;
-
-        this.websocketService.connect(url);
-
-        this.websocketService.message$.subscribe((event: MessageEvent) => {
-            let item = JSON.parse(event.data);
-
-            console.log(item);
+        this.eventService.event.subscribe((event: any) => {
+            console.log(event);
         });
     }
 
     ngOnDestroy() {
-        this.websocketService.close();
+        this.eventService.close();
     }
 }

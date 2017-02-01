@@ -25,6 +25,7 @@ import { NodeService } from './services/node.service';
 import { TaskService } from './services/task.service';
 import { RegistryService } from './services/registry.service';
 import { WebSocketService } from './services/websocket.service';
+import { EventService } from './services/event.service';
 
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { SizePipe } from './pipes/size.pipe';
@@ -66,7 +67,8 @@ import { ConsoleComponent } from './components/console/console.component';
         SwarmService,
         TaskService,
         RegistryService,
-        WebSocketService
+        WebSocketService,
+        EventService
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     bootstrap: [AppComponent]
