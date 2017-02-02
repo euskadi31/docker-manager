@@ -31,7 +31,7 @@ export class ImageComponent implements OnInit {
         this.fetchImages();
 
         this.subscription = this.eventService.event.filter((event): boolean => {
-            return (event.Action == 'pull' && event.Type == 'image');
+            return (event.Type == 'image' && (event.Action == 'pull' || event.Action == 'delete'));
         }).subscribe((event: any) => {
             console.log('pull:', event.id);
 
@@ -47,6 +47,10 @@ export class ImageComponent implements OnInit {
         console.log(image);
 
         this.imageService.pull(image.Repository);
+    }
+
+    remove(image: Image) {
+        this.imageService.remove(image.Id);
     }
 
 }

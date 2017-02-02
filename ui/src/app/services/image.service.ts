@@ -33,4 +33,8 @@ export class ImageService {
     pull(name: string): Promise<any> {
         return this.dockerService.post(`/images/create?fromImage=${name}`, null);
     }
+
+    remove(id: string): Promise<any> {
+        return this.dockerService.delete(`/images/${id}`);
+    }
 }
